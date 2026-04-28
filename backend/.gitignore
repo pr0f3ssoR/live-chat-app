@@ -1,0 +1,17 @@
+.env
+
+__pycache__/
+*.py[cod]          # covers .pyc, .pyo, .pyd
+
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+
+venv/
+.env/
+.venv/
+
+
+node_modules/
