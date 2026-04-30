@@ -1,3 +1,4 @@
 from redis.asyncio import Redis
+from app.config import settings
 
-redis = Redis(decode_responses=True)
+redis = Redis(host=settings.REDIS_HOST,port=settings.REDIS_PORT,db=settings.REDIS_DB_INDEX,decode_responses=True)

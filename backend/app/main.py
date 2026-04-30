@@ -4,15 +4,30 @@ from app.routes.api import router as api_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.sockets.socketio_app import sio
 import socketio
+from contextlib import asynccontextmanager
+from app.core.redis_client import redis
+from app.config import settings
 
-app = FastAPI()
+
+@asynccontextmanager
+async def life_span(app:FastAPI):
+    try:
+        pong = await redis.ping()
+    except Exception as e:
+        raise RuntimeError(f'Redis connectio failed. Make sure redis is installed or provide correct url in .env - {e}')
+
+    yield
+
+    await redis.close()
+
+app = FastAPI(lifespan=life_span)
 
 app.include_router(auth_router)
 app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = ['http://localhost:5173','http://127.0.0.1:5173',],
+    allow_origins = settings.ALLOWED_ORIGINS,
     allow_credentials = True,
     allow_methods = ['*'],
     allow_headers = ['*'],

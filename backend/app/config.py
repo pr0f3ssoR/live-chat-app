@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from typing import List
 
 
 class Settings(BaseSettings):
@@ -7,6 +8,10 @@ class Settings(BaseSettings):
     secret_key: str | None = None
     DATABASE_URL: str | None = None
     algorithm: str = "HS256"
+    REDIS_HOST:str = 'localhost'
+    REDIS_PORT: str = '6379'
+    REDIS_DB_INDEX: str = '0'
+    ALLOWED_ORIGINS: List[str] = ['http://localhost:5173','http://127.0.0.1:5173',]
 
     class Config:
         env_file = ".env"
