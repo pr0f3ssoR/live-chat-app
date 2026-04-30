@@ -201,3 +201,4 @@ These routes will work if user is not authenticated
 |/profile | PAGE | Profile page, only logout but is functional right now |
 |/otp | PAGE | Otp page, it verifies user by otp genrated by backend |
 |/conversations/:id | PAGE | Messagebox page, if the current user exist in the conversation, then it will fetch messages using cursor pagination and user will be able to send message to other user using socketio events |
+
