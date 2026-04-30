@@ -160,3 +160,44 @@ prefix=/api
 |/conv-user/{conv_id} | GET | Returns username for the provided url parameter conv id |
 |/create-conversation/{user_id} | POST | Creates conversation between access token user and url parameter provided user |
 |/delete-conv/{conv_id} | POST | Deletes conversation between between access token user and url parameter provided conv id |
+|/users/?query=<username>| GET | Returns 10 matched users with given username |
+
+
+### SocketIO Server
+
+Base url=http://localhost:8000
+
+NameSpace=/chat
+
+| EVENT | Description |
+|-----|------------|
+|on_connect| Verifies request using access token sent by client in auth body e.g (io(url/namespace,{auth:token{<access_token>}})), joins the sid in room with same user_id and sets user_id in redis with sid|
+|on_disconnect | Disconnects sid and deletes sid from redis |
+|on_create_conv_session| Creates temporary conv_id by authenticating conversation one time, stores in redis,joins sid in that authenticate conv id and then temp conv id will be used for sending messages |
+|on_send_message | Broadcasts message to conv id and user id room by checking if temp conv id is correct |
+
+---
+
+## Frontend Routes
+
+Base url=http://localhost:5173
+
+### Public Routes
+
+These routes will work if user is not authenticated
+
+| URL | Method | Description |
+|-----|--------|------------|
+|/ | PAGE | Login page. Sends request to "/login" in backend route using axios, if authenticated then it will store access and refresh token and redirects user to Private '/' route |
+|/register | PAGE | Register page, sends request to "/register" in background route with user inputs, if register success, then redirects to Private "/otp" route for user to verify itself |
+
+
+### Private Routes
+| URL | Method | Description |
+|-----|--------|------------|
+| / | PAGE | Home page, sends requests to "/u","/conversations" and connects to socketio namespace "/chat" |
+|/users | PAGE | Users page, here user can search for other user by giving usernames of other users, it uses debounce to send request to "/users/?query<user_input>". User can start conversation with others from here |
+|/chats | PAGE | Dummy page
+|/profile | PAGE | Profile page, only logout but is functional right now |
+|/otp | PAGE | Otp page, it verifies user by otp genrated by backend |
+|/conversations/:id | PAGE | Messagebox page, if the current user exist in the conversation, then it will fetch messages using cursor pagination and user will be able to send message to other user using socketio events |
