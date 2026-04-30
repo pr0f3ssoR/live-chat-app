@@ -124,3 +124,39 @@ Note: Make sure your terminal is in "backend" directory in order to all of above
 
    ```bash
    npm run dev
+
+---
+
+## Backend Routes
+
+Base url: http://localhost:8000
+
+### Authentication
+
+prefix=/auth
+
+| URL | Method | Description |
+|-----|--------|------------|
+|/login| POST | It accepts email and password in json body, authenticates user, returns {token:<access_toke>} and sets refresh token in cookies|
+|/regiser| POST | It accepts RegiserModel(defined in schemas.auth.py) parameters in json body, creates user if user does not exist, returns {token:<access_toke>} and sets refresh token in cookies|
+|/logout| POST | It logs out user using access token sent with request, blocks that jwt token and removes refresh token from cookies |
+|/refresh | POST | This route generates new access and refresh token if refresh token sent with cookies is valid |
+|/is-verified | GET | This route verfies if access token user is verified or not|
+|/generate-otp | POST | Generates otp for access token user, stores it in redis(for 5 minutes) |
+|/verify-user | POST | Verifies the otp sent by access token user(in json body), updates user in database to be verified |
+
+### API
+
+Note: this route is proected, all the endpoints will only work if access token is valid or else it will raise http execetpion.
+
+prefix=/api
+
+
+| URL | Method | Description |
+|-----|--------|------------|
+|/u | GET | Returns data(UserOut schema model) for requested access token user. |
+|/conversations | GET | Returns all other users data with their last message for the requested access token user |
+|/conversations/{conv_id} | GET | Returns all messages(in cursor pagination) and last message cursor for url parameter conv id |
+|/conv-user/{conv_id} | GET | Returns username for the provided url parameter conv id |
+|/create-conversation/{user_id} | POST | Creates conversation between access token user and url parameter provided user |
+|/delete-conv/{conv_id} | POST | Deletes conversation between between access token user and url parameter provided conv id |
