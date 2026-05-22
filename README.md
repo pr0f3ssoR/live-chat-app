@@ -5,6 +5,9 @@ The frontend may **not be fully optimized** for user experience or performance.
 
 ---
 
+[![Watch the video](https://img.youtube.com/vi/iR1UW_UfslM/maxresdefault.jpg)](https://youtu.be/iR1UW_UfslM)
+
+
 ## FastAPI + React Real-Time Chat Application
 A real-time one-to-one chat application that supports WebSocket-based messaging, cursor-based pagination, Redis caching, and background task processing via Celery. The system uses a normalized database schema with Socket.io rooms for live delivery of messages between users.
 
